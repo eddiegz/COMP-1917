@@ -61,21 +61,14 @@ int main (void) {
             for(int i=0;i<SIZE;++i){
                 bool f1=false,f2=false;int start=20,end=0;
                 for(int j=0;j<SIZE;++j){
-                    if(map[i][j]==1&&f1==false){
-                        f1=true;
-                        start=j;
+                    if(map[i][j]==1&&j!=0&&valid==true){
+                        map[i][j-1]=1;
+                        map[i][j]=0;
                     }
-                    if(map[i][j]==1){
-                        end=j;
+                    if(map[i][j]==1&&j==0){
+                        valid=false;
                     }
                     
-                }
-                if(start==0){
-                    valid=false;
-                }
-                if(start<=SIZE&&start>=1){
-                    map[i][start-1]=1;
-                    map[i][end]=0;
                 }
             }
             print_map(map,laser_y);
