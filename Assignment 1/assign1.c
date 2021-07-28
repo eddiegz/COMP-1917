@@ -76,7 +76,6 @@ int main (void) {
                 if(start<=SIZE&&start>=1){
                     map[i][start-1]=1;
                     map[i][end]=0;
-                    printf("debugs %d\n",end);
                 }
             }
             print_map(map,laser_y);
