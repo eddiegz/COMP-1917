@@ -2,6 +2,11 @@
 // slide.c
 // This program is written by Eddie Gao
 // Date 28/7
+// I hereby declare that this submission is my own work and to the best of my knowledge 
+// it contains no materials previously published or written by another person, or 
+// substantial proportions of material which have been submitted for an assignment 
+// at UNSW or any other educational institution, except where due acknowledgement 
+// is made in the code.
 // Include all the libaries that I am going to use later
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,12 +18,15 @@
 #define STONE 1
 
 // Declare the two functions that I am going to use later
+// This is a function that will be used to print out the map
 void print_map(int map[SIZE][SIZE], int laser_y);
 
+// This is a checker to check whether the conditions are met to end the game
 bool check(int map[SIZE][SIZE]);
 
 
 int main (void) {
+    // Initialize all the value in the map to empty
     int map[SIZE][SIZE] = {EMPTY};
     int laser_y = SIZE / 2;
     int block;
@@ -29,12 +37,14 @@ int main (void) {
     for (int i = 1; i <= block; ++i) {
         int row,column,vlaue;
         scanf("%d%d%d",&row,&column,&vlaue);
+        // Initialize all the values in the map to 1
         map[row][column] = 1;
     }
     // Validate the build instructions by printing the map
     print_map(map, laser_y);
 
-    // Loop until the game is over
+    // Loop until the game is over, the gameOver variable is used to store
+    // the boolean value of whether the game has ended or not
     bool gameOver = false;
     while (!gameOver) {
         int command,direction;
@@ -49,10 +59,12 @@ int main (void) {
             print_map(map,laser_y);
         }
         else if(command == 2) {
+            // Set the laser line to zero
             for(int i = 0; i < SIZE; ++i){
                 map[laser_y][i] = 0;
             }
             print_map(map,laser_y);
+            // Use the check function to check whether the game is to be ended
             if (check(map)) {
                 printf("Game Won!\n");
                 gameOver = true;
@@ -65,6 +77,7 @@ int main (void) {
             for(int i = 0; i < SIZE; ++i){
                 bool f1 = false,f2 = false;
                 int start = 20,end = 0;
+                // Use a for loop to move those values leftward
                 for(int j = 0; j < SIZE; ++j){
                     if (map[i][j] == 1 && j != 0 && valid == true) {
                         map[i][j-1] = 1;
@@ -73,7 +86,6 @@ int main (void) {
                     if (map[i][j] == 1 && j == 0) {
                         valid = false;
                     }
-                    
                 }
             }
             print_map(map,laser_y);
@@ -81,6 +93,7 @@ int main (void) {
                 printf("Game Lost!\n");
                 gameOver = true;
             }
+            // Use the check function to check whether the game is to be ended
             if (check(map)) {
                 printf("Game Won!\n");
                 gameOver = true;
@@ -92,7 +105,7 @@ int main (void) {
 
 // This function is used to print out the map
 void print_map(int map[SIZE][SIZE], int laser_y) {
-
+    // Loop through the map and print out the map and add a laser tag when required
     for (int i = 0; i < SIZE; ++i){
         if (i != laser_y){
             printf(" ");
