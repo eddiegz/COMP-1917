@@ -1,4 +1,4 @@
-// Assignment 1     Slide
+// Assignment part 2     Slide
 // slide.c
 // This program is written by Eddie Gao
 // Date 28/7
@@ -21,8 +21,11 @@
 // This is a function that will be used to print out the map
 void print_map(int map[SIZE][SIZE], int laser_y);
 
-// This is a checker to check whether the conditions are met to end the game
-bool check(int map[SIZE][SIZE]);
+// This is a function to check whether the conditions are met to win the game
+bool checkwin(int map[SIZE][SIZE]);
+
+// This is a function to check whether the conditions are met to lose the game
+bool checklose(int map[SIZE][SIZE]);
 
 
 int main (void) {
@@ -52,20 +55,20 @@ int main (void) {
         if (command == 1) {
             scanf("%d",&direction);
             if (direction == 1) {
-                laser_y++;
-            } else {
                 laser_y--;
+            } else {
+                laser_y++;
             }
             print_map(map,laser_y);
         }
         else if(command == 2) {
             // Set the laser line to zero
-            for(int i = 0; i < SIZE; ++i){
+            for(int i = 0; i < SIZE; ++i) {
                 map[laser_y][i] = 0;
             }
             print_map(map,laser_y);
-            // Use the check function to check whether the game is to be ended
-            if (check(map)) {
+            // Use the checkwin function to checkwin whether the game is to be ended
+            if (checkwin(map)) {
                 printf("Game Won!\n");
                 gameOver = true;
             } else {
@@ -73,30 +76,26 @@ int main (void) {
             }
         }
         else if(command == 3) {
-            bool valid = true;
-            for(int i = 0; i < SIZE; ++i){
-                bool f1 = false,f2 = false;
-                int start = 20,end = 0;
-                // Use a for loop to move those values leftward
-                for(int j = 0; j < SIZE; ++j){
-                    if (map[i][j] == 1 && j != 0 && valid == true) {
-                        map[i][j-1] = 1;
-                        map[i][j] = 0;
-                    }
-                    if (map[i][j] == 1 && j == 0) {
-                        valid = false;
-                    }
-                }
-            }
-            print_map(map,laser_y);
-            if (valid == false) {
+            if(checklose(map)) {  
+                print_map(map,laser_y);
                 printf("Game Lost!\n");
                 gameOver = true;
             }
-            // Use the check function to check whether the game is to be ended
-            if (check(map)) {
-                printf("Game Won!\n");
-                gameOver = true;
+            else{
+                for(int i = 0; i < SIZE; ++i) {
+                    // Use a for loop to move those values leftward
+                    for(int j = 0; j < SIZE; ++j) {
+                        if (map[i][j] == 1 && j != 0) {
+                            map[i][j-1] = 1;
+                            map[i][j] = 0;
+                        }
+                    }
+                }
+                print_map(map,laser_y);
+                if (checkwin(map)) {
+                    printf("Game Won!\n");
+                    gameOver = true;
+                }
             }
         }
     }
@@ -106,28 +105,41 @@ int main (void) {
 // This function is used to print out the map
 void print_map(int map[SIZE][SIZE], int laser_y) {
     // Loop through the map and print out the map and add a laser tag when required
-    for (int i = 0; i < SIZE; ++i){
-        if (i != laser_y){
+    for (int i = 0; i < SIZE; ++i) {
+        if (i != laser_y) {
             printf(" ");
         } else {
             printf(">");
         }
-        for(int j = 0; j < SIZE; ++j){
+        for(int j = 0; j < SIZE; ++j) {
             printf(" %d",map[i][j]);
         }
         printf("\n");
     }
 }
 
-//This function is used to check if the conditions have been met in order to finish the game
-bool check(int map[SIZE][SIZE]){
+// This function is used to checkwin if the conditions have been met in order to finish the game
+bool checkwin(int map[SIZE][SIZE]) {
     bool status=true;
-    for(int i = 0;i < SIZE; ++i){
-        for(int j = 0;j < SIZE; ++j){
-            if(map[i][j] == 1){
+    for(int i = 0; i < SIZE; ++i) {
+        for(int j = 0; j < SIZE; ++j) {
+            if(map[i][j] == 1) {
                 status = false;
             }
         }
     }
     return status;
+}
+
+// This function is to check whether the conditions are met to determine the game is lost.
+bool checklose(int map[SIZE][SIZE]) {
+    bool lose = false;
+    int index = 0;
+    while(lose == false && index < SIZE) {
+        if(map[index][0] == 1) {
+            lose = true;
+        }
+        index++;
+    }
+    return lose;
 }
